@@ -29,7 +29,7 @@ $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
 $(NAME): $(OBJS)
-	@$(GCC) $(CFLAGS) $(LIBFT_DIR)/$(LIBFT) $(OBJS) $(SAN) -o $(NAME)
+	@$(GCC) $(CFLAGS) $(SAN) $(OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

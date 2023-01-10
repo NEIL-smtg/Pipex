@@ -4,11 +4,16 @@ LIBFT_DIR	=	Libft
 GCC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
 SAN			=	-fsanitize=address -g
-FILES		=	main
+FILES		=	main process utils
+BONUS_FILES	=	main
 SRCS_DIR	=	srcs/
 OBJS_DIR	=	objs/
+BONUS_DIR	=	bonus_srcs/
+BOJS_DIR	=	bonus_objs/
 SRCS		=	$(addprefix $(SRCS_DIR), $(addsuffix .c, $(FILES)))
 OBJS		=	$(addprefix $(OBJS_DIR), $(addsuffix .o, $(FILES)))
+BONUS_SRCS	=	$(addprefix $(BONUS_DIR), $(addsuffix .c, $(BONUS_FILES)))
+BONUS_OBJS	=	$(addprefix $(BOJS_DIR), $(addsuffix .o, $(BONUS_FILES)))
 RM			=	rm -rf
 RED			:= $(shell tput -Txterm setaf 1)
 RESET		:= $(shell tput -Txterm sgr0)
@@ -19,17 +24,28 @@ all:
 	@make $(NAME)
 	@echo "$(RED)PIPEX is ready hehe..."
 
-bonus:
-	mkdir -p $(OBJS_DIR)
-	libft
-	make $(NAME)
-	@echo "$(RED)PIPEX (bonus) is ready hehe..."
-
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
 $(NAME): $(OBJS)
+	@$(GCC) $(CFLAGS) $(OBJS) $(LIBFT_DIR)/$(LIBFT) $(SAN) -o $(NAME)
+
+bonus:
+	@mkdir -p $(BOJS_DIR)
+	@make $(LIBFT)
+	@make bname
+	@echo "$(RED)PIPEX (bonus) is ready hehe..."
+
+$(BOJS_DIR)%.o: $(BONUS_DIR)%.c
+	@$(GCC) -c $< -o $@
+
+<<<<<<< Updated upstream
+$(NAME): $(OBJS)
 	@$(GCC) $(CFLAGS) $(SAN) $(OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
+=======
+bname: $(BONUS_OBJS)
+	@$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) $(SAN) -o $(NAME)
+>>>>>>> Stashed changes
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
@@ -43,10 +59,19 @@ fclean:
 	@make fclean -C $(LIBFT_DIR)
 	@echo "$(RED)Deleted everything hehe..."
 
+cleanb:
+	@$(RM) $(BOBJS_DIR)
+
+fcleanb:
+	@make clean
+	@$(RM) $(BOJS_DIR)
+	@make fclean -C $(LIBFT_DIR)
+	@echo "$(RED)Deleted everything hehe..."
+
 re:
 	@make fclean
 	@make all
 
 norm:
 	@norminette -R CheckForbidenSourceHeader $(SRCS)
-	@make norm -C $(LIBFT_DIR)
+	@norminette -R CheckForbidenSourceHeader $(BONUS_SRCS)

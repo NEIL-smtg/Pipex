@@ -39,13 +39,8 @@ bonus:
 $(BOJS_DIR)%.o: $(BONUS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
-<<<<<<< Updated upstream
-$(NAME): $(OBJS)
-	@$(GCC) $(CFLAGS) $(SAN) $(OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
-=======
 bname: $(BONUS_OBJS)
 	@$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) $(SAN) -o $(NAME)
->>>>>>> Stashed changes
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

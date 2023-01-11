@@ -5,7 +5,7 @@ GCC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
 SAN			=	-fsanitize=address -g
 FILES		=	main process utils
-BONUS_FILES	=	main
+BONUS_FILES	=	main process utils
 SRCS_DIR	=	srcs/
 OBJS_DIR	=	objs/
 BONUS_DIR	=	bonus_srcs/

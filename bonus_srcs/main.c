@@ -6,7 +6,7 @@
 /*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:57:46 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/11 17:34:21 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/11 19:04:10 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	init(t_pipex *p, int ac, char **av, char **env)
 	p->env = env;
 	set_path(p, env);
 	set_cmd(p, av, ac);
-	ft_printf("%d\n", p->pipe_size);
 	p->fd = malloc(p->pipe_size * sizeof(int *));
 	i = -1;
 	while (p->fd[++i])

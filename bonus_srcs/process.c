@@ -6,7 +6,7 @@
 /*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:10:48 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/11 18:22:18 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/11 19:18:47 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ void	handle_dup(t_pipex p)
 	}
 	else if (p.pipex_index == p.pipe_size - 1)
 	{
-		dup2(p.fd[p.pipex_index][0], 0);
+		dup2(p.fd[p.pipex_index - 1][0], 0);
 		dup2(p.outfile, 1);
 	}
 	else
 	{
-		dup2(p.fd[p.pipex_index][0], 0);
+		dup2(p.fd[p.pipex_index - 1][0], 0);
 		dup2(p.fd[p.pipex_index][1], 1);
 	}
-	close_pipe(&p, p.pipex_index);
 }
 
 void	do_it(t_pipex p)
@@ -58,13 +57,16 @@ void	do_it(t_pipex p)
 	pid = fork();
 	if (pid == -1)
 		error_msg("Error forking process !\n");
-	if (pid == 0)
+	if (!pid)
 	{
 		handle_dup(p);
-		p.first_arg = get_first_arg(p, p.cmd[p.pipex_index]);
+		close_pipe(&p, p.pipex_index);
 		p.second_arg = ft_split(p.cmd[p.pipex_index], 32);
+		p.first_arg = get_first_arg(p, p.second_arg[0]);
 		execve(p.first_arg, p.second_arg, p.env);
 	}
+	close_pipe(&p, p.pipex_index);
+	waitpid(pid, NULL, 0);
 }
 
 void	execute(t_pipex *p)

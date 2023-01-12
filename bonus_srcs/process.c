@@ -6,7 +6,7 @@
 /*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:10:48 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/11 19:18:47 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/12 19:32:49 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	handle_dup(t_pipex p)
 	if (p.pipex_index == 0)
 	{
 		dup2(p.infile, 0);
-		dup2(p.fd[p.pipex_index][1], 1);
+		dup2(p.fd[0][1], 1);
 	}
 	else if (p.pipex_index == p.pipe_size - 1)
 	{
@@ -60,22 +60,23 @@ void	do_it(t_pipex p)
 	if (!pid)
 	{
 		handle_dup(p);
-		close_pipe(&p, p.pipex_index);
+		close_all_pipess(&p);
 		p.second_arg = ft_split(p.cmd[p.pipex_index], 32);
 		p.first_arg = get_first_arg(p, p.second_arg[0]);
 		execve(p.first_arg, p.second_arg, p.env);
 	}
-	close_pipe(&p, p.pipex_index);
-	waitpid(pid, NULL, 0);
 }
 
 void	execute(t_pipex *p)
 {
-	int	i;
-
-	while (p->pipex_index < p->pipe_size)
+	if (p->pipe_size == 2)
+		do_it2(*p);
+	else
 	{
-		do_it(*p);
-		++(p->pipex_index);
+		while (p->pipex_index < p->pipe_size)
+		{
+			do_it(*p);
+			++(p->pipex_index);
+		}
 	}
 }

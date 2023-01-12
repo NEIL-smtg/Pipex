@@ -5,7 +5,7 @@ GCC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
 SAN			=	-fsanitize=address -g
 FILES		=	main process utils
-BONUS_FILES	=	main process utils
+BONUS_FILES	=	main process process_2 utils here_doc
 SRCS_DIR	=	srcs/
 OBJS_DIR	=	objs/
 BONUS_DIR	=	bonus_srcs/
@@ -28,7 +28,7 @@ $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
 $(NAME): $(OBJS)
-	@$(GCC) $(CFLAGS) $(OBJS) $(LIBFT_DIR)/$(LIBFT) $(SAN) -o $(NAME)
+	@$(GCC) $(CFLAGS) $(OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
 
 bonus:
 	@mkdir -p $(BOJS_DIR)
@@ -40,7 +40,7 @@ $(BOJS_DIR)%.o: $(BONUS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
 bname: $(BONUS_OBJS)
-	@$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) $(SAN) -o $(NAME)
+	@$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
@@ -59,6 +59,7 @@ cleanb:
 
 fcleanb:
 	@make clean
+	@$(RM) $(NAME)
 	@$(RM) $(BOJS_DIR)
 	@make fclean -C $(LIBFT_DIR)
 	@echo "$(RED)Deleted everything hehe..."

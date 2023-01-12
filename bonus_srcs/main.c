@@ -6,11 +6,18 @@
 /*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:57:46 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/11 19:04:10 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/12 19:53:31 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void	set_infile(t_pipex *p, char **av)
+{
+	p->infile = open(av[1], O_RDONLY);
+	if (p->infile == -1)
+		error_msg("Error opening infile !!\n");
+}
 
 void	set_path(t_pipex *p, char **env)
 {
@@ -51,6 +58,8 @@ void	init(t_pipex *p, int ac, char **av, char **env)
 	p->env = env;
 	set_path(p, env);
 	set_cmd(p, av, ac);
+	if (p->pipe_size == 2)
+		return ;
 	p->fd = malloc(p->pipe_size * sizeof(int *));
 	i = -1;
 	while (p->fd[++i])
@@ -67,17 +76,17 @@ void	init(t_pipex *p, int ac, char **av, char **env)
 int	main(int ac, char **av, char **env)
 {
 	t_pipex	pipex;
-	int		fd;
 
 	if (ac < 5)
 		return (0);
-	fd = open(av[1], O_RDONLY);
-	if (fd == -1)
-		error_msg("Infile open error !!\n");
-	pipex.infile = fd;
+	if (!ft_strncmp("here_doc", av[1], 9))
+		handle_here_doc(&pipex, ac);
+	else
+		pipex.here_doc = 0;
+	if (!pipex.here_doc)
+		set_infile(&pipex, av);
 	init(&pipex, ac, av, env);
 	execute(&pipex);
-	close_pipe(&pipex, pipex.pipe_size);
 	close(pipex.infile);
 	close(pipex.outfile);
 	return (0);

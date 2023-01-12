@@ -6,7 +6,7 @@
 /*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:59:40 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/11 18:20:57 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/12 19:42:25 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 typedef struct s_pipex
 {
+	int		here_doc;
 	int		**fd;
 	int		pipe_size;
 	char	**cmd;
@@ -27,16 +28,23 @@ typedef struct s_pipex
 	char	**env;
 	int		infile;
 	int		outfile;
+	int		fd2[2];
 	int		pipex_index;
 	char	*first_arg;
 	char	**second_arg;
 }	t_pipex;
 
+//heredoc
+void	handle_here_doc(t_pipex *p, int ac);
+
 //utils
 void	error_msg(char *s);
 void	close_pipe(t_pipex *p, int j);
+void	close_all_pipess(t_pipex *p);
 
 //process
 void	execute(t_pipex *p);
+void	do_it2(t_pipex p);
+char	*get_first_arg(t_pipex p, char *cmd);
 
 #endif

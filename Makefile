@@ -40,7 +40,7 @@ $(BOJS_DIR)%.o: $(BONUS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
 bname: $(BONUS_OBJS)
-	@$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
+	@$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) $(SAN) -o $(NAME)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

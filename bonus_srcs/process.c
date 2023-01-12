@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:10:48 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/12 19:32:49 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/13 02:23:59 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	handle_dup(t_pipex p)
 		dup2(p.infile, 0);
 		dup2(p.fd[0][1], 1);
 	}
-	else if (p.pipex_index == p.pipe_size - 1)
+	else if (p.pipex_index == p.pipe_size || p.pipex_index == p.pipe_size - 1)
 	{
 		dup2(p.fd[p.pipex_index - 1][0], 0);
 		dup2(p.outfile, 1);
@@ -69,10 +69,18 @@ void	do_it(t_pipex p)
 
 void	execute(t_pipex *p)
 {
-	if (p->pipe_size == 2)
-		do_it2(*p);
+	if (p->pipe_size == 1)
+	{
+		p->pipex_index = -1;
+		while (p->pipex_index < p->pipe_size)
+		{
+			++(p->pipex_index);
+			do_it(*p);
+		}
+	}
 	else
 	{
+		p->pipex_index = 0;
 		while (p->pipex_index < p->pipe_size)
 		{
 			do_it(*p);

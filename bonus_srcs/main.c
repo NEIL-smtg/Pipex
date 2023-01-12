@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:57:46 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/12 19:53:31 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/13 02:23:20 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,16 @@ void	set_cmd(t_pipex *p, char **av, int ac)
 		++j;
 	}
 	p->cmd[j] = 0;
-	p->pipe_size = j;
+	if (j == 2)
+		p->pipe_size = j - 1;
+	else
+		p->pipe_size = j;
 }
 
 void	init(t_pipex *p, int ac, char **av, char **env)
 {
 	int	i;
 
-	p->pipex_index = 0;
 	p->outfile = open(av[ac - 1], O_CREAT | O_TRUNC | O_RDWR, 0000644);
 	if (p->outfile == -1)
 	{
@@ -58,11 +60,9 @@ void	init(t_pipex *p, int ac, char **av, char **env)
 	p->env = env;
 	set_path(p, env);
 	set_cmd(p, av, ac);
-	if (p->pipe_size == 2)
-		return ;
 	p->fd = malloc(p->pipe_size * sizeof(int *));
 	i = -1;
-	while (p->fd[++i])
+	while (++i < p->pipe_size)
 	{
 		p->fd[i] = malloc(2 * sizeof(int));
 		if (pipe(p->fd[i]) == -1)
@@ -87,7 +87,6 @@ int	main(int ac, char **av, char **env)
 		set_infile(&pipex, av);
 	init(&pipex, ac, av, env);
 	execute(&pipex);
-	close(pipex.infile);
-	close(pipex.outfile);
+	free_all(&pipex);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:59:40 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/12 19:42:25 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/13 00:50:12 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	handle_here_doc(t_pipex *p, int ac);
 void	error_msg(char *s);
 void	close_pipe(t_pipex *p, int j);
 void	close_all_pipess(t_pipex *p);
+void	free_all(t_pipex *p);
 
 //process
 void	execute(t_pipex *p);

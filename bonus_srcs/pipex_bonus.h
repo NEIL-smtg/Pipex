@@ -6,7 +6,7 @@
 /*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:59:40 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/13 00:50:12 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/13 02:28:24 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	free_all(t_pipex *p);
 
 //process
 void	execute(t_pipex *p);
-void	do_it2(t_pipex p);
 char	*get_first_arg(t_pipex p, char *cmd);
 
 #endif

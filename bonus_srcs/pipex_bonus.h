@@ -6,7 +6,7 @@
 /*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:59:40 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/13 02:28:24 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/15 16:23:10 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_pipex
 }	t_pipex;
 
 //heredoc
-void	handle_here_doc(t_pipex *p, int ac);
+void	handle_here_doc(t_pipex *p, int ac, char *limiter);
 
 //utils
 void	error_msg(char *s);

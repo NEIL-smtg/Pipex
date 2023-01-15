@@ -3,16 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 16:13:57 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/12 17:24:48 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/15 17:18:03 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	handle_here_doc(t_pipex *p, int ac)
+int	process_line(char *line, char *limiter)
+{
+	int	len;
+
+	len = ft_strlen(line);
+	if (line[len - 1] == '\n' && len - 1 == ft_strlen(limiter))
+		if (!ft_strncmp(line, limiter, ft_strlen(limiter)))
+			return (1);
+	return (0);
+}
+
+void	handle_here_doc(t_pipex *p, int ac, char *limiter)
 {
 	int		fd;
 	char	*line;
@@ -27,7 +38,7 @@ void	handle_here_doc(t_pipex *p, int ac)
 	{
 		ft_printf("heredoc> ");
 		line = get_next_line(0);
-		if (!ft_strncmp("EOF\n", line, 5))
+		if (process_line(line, limiter))
 		{
 			free(line);
 			break ;

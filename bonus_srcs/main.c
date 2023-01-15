@@ -6,7 +6,7 @@
 /*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:57:46 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/13 02:23:20 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/15 17:22:16 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	set_cmd(t_pipex *p, char **av, int ac)
 
 	j = 0;
 	p->cmd = ft_calloc(ac - 2, sizeof(char *));
-	while (j + 2 < ac - 1)
+	while (j + 2 + p->here_doc < ac - 1)
 	{
-		p->cmd[j] = ft_strdup(av[j + 2]);
+		p->cmd[j] = ft_strdup(av[j + 2 + p->here_doc]);
 		++j;
 	}
 	p->cmd[j] = 0;
@@ -80,7 +80,7 @@ int	main(int ac, char **av, char **env)
 	if (ac < 5)
 		return (0);
 	if (!ft_strncmp("here_doc", av[1], 9))
-		handle_here_doc(&pipex, ac);
+		handle_here_doc(&pipex, ac, av[2]);
 	else
 		pipex.here_doc = 0;
 	if (!pipex.here_doc)

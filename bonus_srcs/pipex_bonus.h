@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
+/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:59:40 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/15 16:23:10 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:47:52 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_pipex
 	char	**env;
 	int		infile;
 	int		outfile;
-	int		fd2[2];
 	int		pipex_index;
 	char	*first_arg;
 	char	**second_arg;
@@ -38,7 +37,7 @@ typedef struct s_pipex
 void	handle_here_doc(t_pipex *p, int ac, char *limiter);
 
 //utils
-void	error_msg(char *s);
+void	error_msg(char *s, int code);
 void	close_pipe(t_pipex *p, int j);
 void	close_all_pipess(t_pipex *p);
 void	free_all(t_pipex *p);

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
+/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:06:57 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/13 01:45:20 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:47:41 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	error_msg(char *s)
+void	error_msg(char *s, int code)
 {
-	write(2, s, ft_strlen(s));
-	exit(EXIT_FAILURE);
+	perror(s);
+	exit(code);
 }
 
 void	close_pipe(t_pipex *p, int j)

@@ -6,7 +6,7 @@
 /*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 19:52:26 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/10 19:53:08 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/18 17:17:53 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ typedef struct s_pipex
 	char	**p1_second_arg;
 	char	*p2_first_arg;
 	char	**p2_second_arg;
+	int		status_code;
 }	t_pipex;
 
 
 //utils
-void	error_msg(char *s);
+void	error_msg(char *s, int code);
 void	free_all(t_pipex *p);
 
 //process

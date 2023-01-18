@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
+/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:10:48 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/13 02:23:59 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/18 21:13:30 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+int	first_arg_preprocessing(t_pipex p, char *exe)
+{
+	char	**split;
+	int		i;
+	int		flag;
+
+	i = 0;
+	flag = 0;
+	split = ft_split(exe, '/');
+	while (split[i])
+		++i;
+	if (i != 0)
+	{
+		free(exe);
+		exe = ft_strdup(split[i - 1]);
+		flag = 1;
+	}
+	i = -1;
+	while (split[++i])
+		free(split[i]);
+	free(split);
+	return (flag);
+}
 
 char	*get_first_arg(t_pipex p, char *cmd)
 {
@@ -18,6 +42,10 @@ char	*get_first_arg(t_pipex p, char *cmd)
 	char	*tmp;
 	char	*arg;
 
+	if (access(cmd, 0) == 0)
+		return (ft_strdup(cmd));
+	else
+		first_arg_preprocessing(p, cmd);
 	i = -1;
 	while (p.path[++i])
 	{
@@ -56,14 +84,23 @@ void	do_it(t_pipex p)
 
 	pid = fork();
 	if (pid == -1)
-		error_msg("Error forking process !\n");
+		error_msg("Fork error !\n", 1);
 	if (!pid)
 	{
 		handle_dup(p);
 		close_all_pipess(&p);
 		p.second_arg = ft_split(p.cmd[p.pipex_index], 32);
 		p.first_arg = get_first_arg(p, p.second_arg[0]);
-		execve(p.first_arg, p.second_arg, p.env);
+		if (!p.first_arg)
+		{
+			free_all(&p);
+			error_msg("Command not found\n", 1);
+		}
+		if (execve(p.first_arg, p.second_arg, p.env) == -1)
+		{
+			free_all(&p);
+			error_msg("Command not found\n", 1);
+		}
 	}
 }
 
@@ -87,4 +124,5 @@ void	execute(t_pipex *p)
 			++(p->pipex_index);
 		}
 	}
+	waitpid(-1, NULL, 0);
 }

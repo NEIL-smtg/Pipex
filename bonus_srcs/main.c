@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
+/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:57:46 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/15 17:22:16 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:48:39 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	set_infile(t_pipex *p, char **av)
 {
 	p->infile = open(av[1], O_RDONLY);
 	if (p->infile == -1)
-		error_msg("Error opening infile !!\n");
+		error_msg("Infile", 0);
 }
 
 void	set_path(t_pipex *p, char **env)
@@ -26,7 +26,7 @@ void	set_path(t_pipex *p, char **env)
 	i = 0;
 	while (ft_strncmp("PATH", env[i], 4))
 		++i;
-	p->path = ft_split(env[i], ':');
+	p->path = ft_split(env[i] + 5, ':');
 }
 
 void	set_cmd(t_pipex *p, char **av, int ac)
@@ -55,7 +55,7 @@ void	init(t_pipex *p, int ac, char **av, char **env)
 	if (p->outfile == -1)
 	{
 		close(p->infile);
-		error_msg("Error creating/opening outfile !!\n");
+		error_msg("Outfile", 1);
 	}
 	p->env = env;
 	set_path(p, env);
@@ -68,7 +68,7 @@ void	init(t_pipex *p, int ac, char **av, char **env)
 		if (pipe(p->fd[i]) == -1)
 		{
 			close_pipe(p, i);
-			error_msg("Error piping !\n");
+			error_msg("Pipe", 1);
 		}
 	}
 }
@@ -77,8 +77,8 @@ int	main(int ac, char **av, char **env)
 {
 	t_pipex	pipex;
 
-	if (ac < 5)
-		return (0);
+	if (ac < 5 || av == NULL)
+		error_msg("Invalid number of arguments.\n", 1);
 	if (!ft_strncmp("here_doc", av[1], 9))
 		handle_here_doc(&pipex, ac, av[2]);
 	else

@@ -1,4 +1,5 @@
 NAME		=	pipex
+BNAME		=	bpipex
 LIBFT		=	libft.a
 LIBFT_DIR	=	Libft
 GCC			=	gcc
@@ -19,7 +20,7 @@ RED			:= $(shell tput -Txterm setaf 1)
 RESET		:= $(shell tput -Txterm sgr0)
 
 all:
-	@mkdir -p $(OBJS_DIR)
+	@mkdir -p $(BOJS_DIR)
 	@make $(LIBFT)
 	@make $(NAME)
 	@echo "$(RED)PIPEX is ready hehe..."
@@ -27,20 +28,21 @@ all:
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
-$(NAME): $(OBJS)
-	@$(GCC) $(CFLAGS) $(OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
+$(NAME): $(BONUS_OBJS)
+	$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
 
 bonus:
 	@mkdir -p $(BOJS_DIR)
 	@make $(LIBFT)
-	@make bname
-	@echo "$(RED)PIPEX (bonus) is ready hehe..."
+	@make $(NAME)
+	@echo "$(RED)PIPEX is ready hehe..."
 
 $(BOJS_DIR)%.o: $(BONUS_DIR)%.c
 	@$(GCC) -c $< -o $@
 
-bname: $(BONUS_OBJS)
-	@$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) $(SAN) -o $(NAME)
+$(BNAME): $(BONUS_OBJS)
+	$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(BNAME)
+	@cp $(BNAME) $(NAME)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
@@ -59,7 +61,7 @@ cleanb:
 
 fcleanb:
 	@make clean
-	@$(RM) $(NAME)
+	@$(RM) $(BNAME)
 	@$(RM) $(BOJS_DIR)
 	@make fclean -C $(LIBFT_DIR)
 	@echo "$(RED)Deleted everything hehe..."

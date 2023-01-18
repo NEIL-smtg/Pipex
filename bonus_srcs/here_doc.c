@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
+/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 16:13:57 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/15 17:18:03 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:50:19 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void	heredoc_error(char *file)
+{
+	unlink(".heredoc_tmp");
+	error_msg("Error opening .heredoc_tmp !!\n", 1);
+}
 
 int	process_line(char *line, char *limiter)
 {
@@ -29,11 +35,11 @@ void	handle_here_doc(t_pipex *p, int ac, char *limiter)
 	char	*line;
 
 	if (ac < 6)
-		error_msg("Lack of arguments for here_doc !\n");
+		error_msg("Invalid number of arguments.\n", 1);
 	p->here_doc = 1;
 	fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (fd == -1)
-		error_msg("Error opening .heredoc_tmp !!\n");
+		heredoc_error(".heredoc_tmp");
 	while (1)
 	{
 		ft_printf("heredoc> ");
@@ -49,5 +55,5 @@ void	handle_here_doc(t_pipex *p, int ac, char *limiter)
 	close(fd);
 	p->infile = open(".heredoc_tmp", O_RDONLY);
 	if (p->infile == -1)
-		error_msg("Error opening infile !!\n");
+		error_msg("Infile", 1);
 }

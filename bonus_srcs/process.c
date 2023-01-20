@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 16:10:48 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/18 21:13:30 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/19 02:42:08 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,17 @@ void	handle_dup(t_pipex p)
 void	do_it(t_pipex p)
 {
 	int		pid;
+	int		status;
 
+	if (p.pipe_size == 1)
+		waitpid(-1, &status, 0);
 	pid = fork();
 	if (pid == -1)
 		error_msg("Fork error !\n", 1);
 	if (!pid)
 	{
+		if (p.pipe_size != 1)
+			waitpid(-1, &status, 0);
 		handle_dup(p);
 		close_all_pipess(&p);
 		p.second_arg = ft_split(p.cmd[p.pipex_index], 32);
@@ -94,13 +99,11 @@ void	do_it(t_pipex p)
 		if (!p.first_arg)
 		{
 			free_all(&p);
-			error_msg("Command not found\n", 1);
+			error_msg("Command not found\n", status);
 		}
-		if (execve(p.first_arg, p.second_arg, p.env) == -1)
-		{
-			free_all(&p);
-			error_msg("Command not found\n", 1);
-		}
+		execve(p.first_arg, p.second_arg, p.env);
+		free_all(&p);
+		error_msg("Command not found\n", status);
 	}
 }
 
@@ -124,5 +127,4 @@ void	execute(t_pipex *p)
 			++(p->pipex_index);
 		}
 	}
-	waitpid(-1, NULL, 0);
 }

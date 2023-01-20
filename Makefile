@@ -25,8 +25,17 @@ all:
 	@make $(NAME)
 	@echo "$(RED)PIPEX is ready hehe..."
 
+# all:
+# 	@mkdir -p $(OBJS_DIR)
+# 	@make $(LIBFT)
+# 	@make $(NAME)
+# 	@echo "$(RED)PIPEX is ready hehe..."
+
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@$(GCC) -c $< -o $@
+
+# $(NAME): $(OBJS)
+# 	$(GCC) $(CFLAGS) $(OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
 
 $(NAME): $(BONUS_OBJS)
 	$(GCC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT_DIR)/$(LIBFT) -o $(NAME)
@@ -53,6 +62,7 @@ clean:
 fclean:
 	@make clean
 	@$(RM) $(NAME)
+	@$(RM) $(BOBJS_DIR)
 	@make fclean -C $(LIBFT_DIR)
 	@echo "$(RED)Deleted everything hehe..."
 

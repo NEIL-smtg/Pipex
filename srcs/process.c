@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suchua <suchua@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: suchua < suchua@student.42kl.edu.my>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:44:47 by suchua            #+#    #+#             */
-/*   Updated: 2023/01/18 19:26:10 by suchua           ###   ########.fr       */
+/*   Updated: 2023/01/19 02:07:12 by suchua           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,9 @@ void	child_1(t_pipex p)
 		free_all(&p);
 		error_msg("Command not found\n", 1);
 	}
-	if (execve(p.p1_first_arg, p.p1_second_arg, p.env) == -1)
-	{
-		free_all(&p);
-		error_msg("Command not found\n", 1);
-	}
+	execve(p.p1_first_arg, p.p1_second_arg, p.env);
+	free_all(&p);
+	error_msg("Command not found\n", 1);
 }
 
 void	child_2(t_pipex p)
@@ -89,20 +87,15 @@ void	child_2(t_pipex p)
 		free_all(&p);
 		error_msg("Command not found\n", 1);
 	}
-	if (execve(p.p2_first_arg, p.p2_second_arg, p.env) == -1)
-	{
-		free_all(&p);
-		error_msg("Command not found\n", 1);
-	}
+	execve(p.p2_first_arg, p.p2_second_arg, p.env);
+	free_all(&p);
+	error_msg("Command not found\n", 1);
 }
 
 void	do_it(t_pipex p)
 {
 	int	pid1;
-	int	pid2;
 
-	p.p1_first_arg = NULL;
-	p.p2_first_arg = NULL;
 	pid1 = fork();
 	if (pid1 == -1)
 	{
@@ -111,16 +104,11 @@ void	do_it(t_pipex p)
 	}
 	if (pid1 == 0)
 		child_1(p);
-	pid2 = fork();
-	if (pid2 == -1)
+	else
 	{
-		free_all(&p);
-		error_msg("Error opening fork !\n", -1);
-	}
-	if (pid2 == 0)
+		waitpid(pid1, NULL, 0);
 		child_2(p);
+	}
 	close(p.fd[0]);
 	close(p.fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
 }
